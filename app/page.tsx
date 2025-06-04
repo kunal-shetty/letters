@@ -1,3 +1,4 @@
+// app/page.tsx
 'use client';
 
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
@@ -11,20 +12,29 @@ interface FormData {
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [formData, setFormData] = useState<FormData>({ name: '', message: '' });
+  const [searchName, setSearchName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [searching, setSearching] = useState<boolean>(false);
 
   // Fetch messages on component mount
   useEffect(() => {
     fetchMessages();
   }, []);
 
-  const fetchMessages = async (): Promise<void> => {
+  const fetchMessages = async (nameFilter?: string): Promise<void> => {
     try {
-      const response = await fetch('/api/messages');
+      setSearching(true);
+      const url = nameFilter 
+        ? `/api/messages?name=${encodeURIComponent(nameFilter)}`
+        : '/api/messages';
+      
+      const response = await fetch(url);
       const data = await response.json();
       setMessages(data.messages || []);
     } catch (error) {
       console.error('Error fetching messages:', error);
+    } finally {
+      setSearching(false);
     }
   };
 
@@ -43,7 +53,8 @@ export default function Home() {
 
       if (response.ok) {
         setFormData({ name: '', message: '' });
-        fetchMessages(); // Refresh messages
+        // If we're currently filtering, maintain the filter
+        fetchMessages(searchName || undefined);
       } else {
         const error = await response.json();
         alert(error.error || 'Failed to send message');
@@ -61,6 +72,16 @@ export default function Home() {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleSearch = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    fetchMessages(searchName);
+  };
+
+  const clearSearch = (): void => {
+    setSearchName('');
+    fetchMessages();
   };
 
   return (
@@ -106,12 +127,50 @@ export default function Home() {
         </button>
       </form>
 
+      {/* Search Form */}
+      <div style={styles.searchContainer}>
+        <form onSubmit={handleSearch} style={styles.searchForm}>
+          <div style={styles.searchInputGroup}>
+            <input
+              type="text"
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
+              placeholder="Search messages by name..."
+              style={styles.searchInput}
+            />
+            <button 
+              type="submit" 
+              disabled={searching}
+              style={styles.searchButton}
+            >
+              {searching ? 'Searching...' : 'Search'}
+            </button>
+            {searchName && (
+              <button 
+                type="button" 
+                onClick={clearSearch}
+                style={styles.clearButton}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
       {/* Messages Display */}
       <div style={styles.messagesContainer}>
-        <h2 style={styles.messagesTitle}>Messages ({messages.length})</h2>
+        <h2 style={styles.messagesTitle}>
+          Messages ({messages.length})
+          {searchName && (
+            <span style={styles.searchIndicator}> - Filtered by "{searchName}"</span>
+          )}
+        </h2>
         
         {messages.length === 0 ? (
-          <p style={styles.noMessages}>No messages yet. Be the first to post!</p>
+          <p style={styles.noMessages}>
+            {searchName ? `No messages found for "${searchName}".` : 'No messages yet. Be the first to post!'}
+          </p>
         ) : (
           <div style={styles.messagesList}>
             {messages.map((msg: Message) => (
@@ -151,7 +210,7 @@ const styles = {
     backgroundColor: '#f9f9f9',
     padding: '20px',
     borderRadius: '8px',
-    marginBottom: '30px',
+    marginBottom: '20px',
     border: '1px solid #ddd',
   },
   inputGroup: {
@@ -194,6 +253,48 @@ const styles = {
     backgroundColor: '#ccc',
     cursor: 'not-allowed' as const,
   },
+  searchContainer: {
+    backgroundColor: '#f0f8ff',
+    padding: '15px',
+    borderRadius: '8px',
+    marginBottom: '20px',
+    border: '1px solid #b3d9ff',
+  },
+  searchForm: {
+    margin: 0,
+  },
+  searchInputGroup: {
+    display: 'flex',
+    gap: '10px',
+    alignItems: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    padding: '10px',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    fontSize: '16px',
+  },
+  searchButton: {
+    backgroundColor: '#28a745',
+    color: 'white',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '16px',
+    cursor: 'pointer' as const,
+    whiteSpace: 'nowrap' as const,
+  },
+  clearButton: {
+    backgroundColor: '#6c757d',
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '16px',
+    cursor: 'pointer' as const,
+    whiteSpace: 'nowrap' as const,
+  },
   messagesContainer: {
     marginTop: '20px',
   },
@@ -201,6 +302,11 @@ const styles = {
     color: '#333',
     borderBottom: '2px solid #007cba',
     paddingBottom: '10px',
+  },
+  searchIndicator: {
+    fontSize: '14px',
+    fontStyle: 'italic' as const,
+    color: '#666',
   },
   noMessages: {
     textAlign: 'center' as const,
