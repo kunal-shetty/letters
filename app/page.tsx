@@ -236,7 +236,7 @@ export default function Home() {
           ...styles.mainTitle,
           animation: isVisible ? 'titleReveal 1s ease-out 0.5s forwards, gradientShift 3s ease-in-out infinite' : 'none'
         }}>
-          Message Board
+          Unsent Letters
         </h1>
         
         {/* Message Form */}
@@ -246,7 +246,7 @@ export default function Home() {
           animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.2s forwards' : 'none'
         }}>
           <h2 style={styles.cardTitle}>
-            ✨ Share Your Thoughts
+            Send heartfelt letters with music to those who matter ✨
           </h2>
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.inputGroup}>
@@ -264,7 +264,7 @@ export default function Home() {
             </div>
             
             <div style={styles.inputGroup}>
-              <label htmlFor="message" style={styles.label}>Message</label>
+              <label htmlFor="message" style={styles.label}>Your Message</label>
               <textarea
                 id="message"
                 name="message"
@@ -273,7 +273,7 @@ export default function Home() {
                 required
                 rows={4}
                 style={styles.textarea}
-                placeholder="What's on your mind?"
+                placeholder="Pour your heart out.."
               />
             </div>
             
@@ -290,7 +290,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    🚀 Send Message
+                   Send Message
                   </>
                 )}
               </span>
@@ -305,7 +305,7 @@ export default function Home() {
           animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.4s forwards' : 'none'
         }}>
           <h2 style={styles.cardTitle}>
-            🔍 Search Messages
+            Search A Name
           </h2>
           <form onSubmit={handleSearch} style={styles.searchForm}>
             <div style={styles.searchInputGroup} className="search-input-group">
@@ -368,15 +368,15 @@ export default function Home() {
                   }}
                 >
                   <div style={styles.messageHeader}>
-                    <div style={styles.messageAvatar}>
+                 {/*   <div style={styles.messageAvatar}>
                       {msg.name.charAt(0).toUpperCase()}
-                    </div>
+                    </div> */}
                     <div style={styles.messageInfo}>
                       <strong style={styles.messageName}>{msg.name}</strong>
-                      <span style={styles.messageTime}>
+                  {/*    <span style={styles.messageTime}>
                         {new Date(msg.timestamp).toLocaleDateString()} • {' '}
                         {new Date(msg.timestamp).toLocaleTimeString()}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                   <div style={styles.messageContent}>{msg.message}</div>
