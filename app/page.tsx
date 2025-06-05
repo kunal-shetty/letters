@@ -250,7 +250,7 @@ export default function Home() {
           </h2>
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.inputGroup}>
-              <label htmlFor="name" style={styles.label}>Your Name</label>
+              <label htmlFor="name" style={styles.label}>To Someone Special</label>
               <input
                 type="text"
                 id="name"
@@ -259,7 +259,7 @@ export default function Home() {
                 onChange={handleChange}
                 required
                 style={styles.input}
-                placeholder="Enter your name..."
+                placeholder="Enter a Name....."
               />
             </div>
             
@@ -313,7 +313,7 @@ export default function Home() {
                 type="text"
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
-                placeholder="Search by username..."
+                placeholder="Search your Name..."
                 style={styles.searchInput}
               />
               <button 
