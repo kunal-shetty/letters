@@ -639,6 +639,6 @@ const styles = {
     fontSize: '1rem',
     color: 'rgba(255, 255, 255, 0.9)',
     lineHeight: '1.6',
-    marginLeft: '66px',
+  
   },
 };
