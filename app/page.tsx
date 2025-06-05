@@ -96,8 +96,10 @@ export default function Home() {
         }
 
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          font-family: 'Poppins', sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+          background-size: 400% 400%;
+          animation: gradientShift 15s ease infinite;
           min-height: 100vh;
           overflow-x: hidden;
         }
@@ -246,7 +248,7 @@ export default function Home() {
           animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.2s forwards' : 'none'
         }}>
           <h2 style={styles.cardTitle}>
-            Send heartfelt letters with music to those who matter ✨
+            Send heartfelt letters to those who matter ✨
           </h2>
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.inputGroup}>
@@ -305,7 +307,7 @@ export default function Home() {
           animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.4s forwards' : 'none'
         }}>
           <h2 style={styles.cardTitle}>
-            Search A Name
+            Search for letters sent to you....
           </h2>
           <form onSubmit={handleSearch} style={styles.searchForm}>
             <div style={styles.searchInputGroup} className="search-input-group">
@@ -344,7 +346,7 @@ export default function Home() {
           animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.6s forwards' : 'none'
         }}>
           <h2 style={styles.messagesTitle}>
-            💬 Messages ({messages.length})
+           💌 Unsent Letters ({messages.length})
             {searchName && (
               <span style={styles.searchIndicator}> - "{searchName}"</span>
             )}
@@ -372,11 +374,11 @@ export default function Home() {
                       {msg.name.charAt(0).toUpperCase()}
                     </div> */}
                     <div style={styles.messageInfo}>
-                      <strong style={styles.messageName}>{msg.name}</strong>
-                  {/*    <span style={styles.messageTime}>
+                      <strong style={styles.messageName}>For {msg.name}</strong>
+                      <span style={styles.messageTime}>
                         {new Date(msg.timestamp).toLocaleDateString()} • {' '}
                         {new Date(msg.timestamp).toLocaleTimeString()}
-                      </span> */}
+                      </span> 
                     </div>
                   </div>
                   <div style={styles.messageContent}>{msg.message}</div>
