@@ -339,54 +339,51 @@ export default function Home() {
           </form>
         </div>
 
-        {/* Messages Display */}
-        <div style={{
-          ...styles.glassCard,
-          ...styles.messagesCard,
-          animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.6s forwards' : 'none'
-        }}>
-          <h2 style={styles.messagesTitle}>
-           💌 Unsent Letters ({messages.length})
-            {searchName && (
+        {/* Messages Display - Only show when searching */}
+        {searchName && (
+          <div style={{
+            ...styles.glassCard,
+            ...styles.messagesCard,
+            animation: isVisible ? 'cardSlideIn 0.8s ease-out 0.6s forwards' : 'none'
+          }}>
+            <h2 style={styles.messagesTitle}>
+             💌 Unsent Letters ({messages.length})
               <span style={styles.searchIndicator}> - "{searchName}"</span>
-            )}
-          </h2>
-          
-          {messages.length === 0 ? (
-            <div style={styles.noMessages}>
-              <div style={styles.emptyIcon}>📭</div>
-              <p>
-                {searchName ? `No messages found for "${searchName}".` : 'No messages yet. Be the first to post!'}
-              </p>
-            </div>
-          ) : (
-            <div style={styles.messagesList}>
-              {messages.map((msg: Message, index: number) => (
-                <div 
-                  key={msg.id} 
-                  style={{
-                    ...styles.messageCard,
-                    animation: `messageSlideIn 0.6s ease-out ${index * 0.1}s forwards`
-                  }}
-                >
-                  <div style={styles.messageHeader}>
-                 {/*   <div style={styles.messageAvatar}>
-                      {msg.name.charAt(0).toUpperCase()}
-                    </div> */}
-                    <div style={styles.messageInfo}>
-                      <strong style={styles.messageName}>For {msg.name}</strong>
-                      <span style={styles.messageTime}>
-                        {new Date(msg.timestamp).toLocaleDateString()} • {' '}
-                        {new Date(msg.timestamp).toLocaleTimeString()}
-                      </span> 
+            </h2>
+            
+            {messages.length === 0 ? (
+              <div style={styles.noMessages}>
+                <div style={styles.emptyIcon}>📭</div>
+                <p>
+                  No messages found for "{searchName}".
+                </p>
+              </div>
+            ) : (
+              <div style={styles.messagesList}>
+                {messages.map((msg: Message, index: number) => (
+                  <div 
+                    key={msg.id} 
+                    style={{
+                      ...styles.messageCard,
+                      animation: `messageSlideIn 0.6s ease-out ${index * 0.1}s forwards`
+                    }}
+                  >
+                    <div style={styles.messageHeader}>
+                      <div style={styles.messageInfo}>
+                        <strong style={styles.messageName}>For {msg.name}</strong>
+                        <span style={styles.messageTime}>
+                          {new Date(msg.timestamp).toLocaleDateString()} • {' '}
+                          {new Date(msg.timestamp).toLocaleTimeString()}
+                        </span> 
+                      </div>
                     </div>
+                    <div style={styles.messageContent}>{msg.message}</div>
                   </div>
-                  <div style={styles.messageContent}>{msg.message}</div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
     
@@ -639,6 +636,5 @@ const styles = {
     fontSize: '1rem',
     color: 'rgba(255, 255, 255, 0.9)',
     lineHeight: '1.6',
-  
   },
 };
