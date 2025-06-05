@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { Message } from '../types';
+import { Button } from '@/components/button';
 
 interface FormData {
   name: string;
@@ -222,6 +223,7 @@ export default function Home() {
       `}</style>
 
       {/* Animated background particles */}
+      
       <div className="bg-particles">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="particle"></div>
@@ -329,6 +331,7 @@ export default function Home() {
                 >
                   ❌ Clear
                 </button>
+                
               )}
             </div>
           </form>
@@ -384,6 +387,7 @@ export default function Home() {
         </div>
       </div>
     </>
+    
   );
 }
 
