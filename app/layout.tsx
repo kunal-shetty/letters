@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title:  '💌 unsent letters',
+  title:  'unsent letters',
   description: 'A simple message board app',
 }
 
