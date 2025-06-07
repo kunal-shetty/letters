@@ -13,12 +13,13 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [formData, setFormData] = useState<FormData>({ name: '', message: '' });
   const [searchName, setSearchName] = useState<string>('');
+  const [hasSearched, setHasSearched] = useState<boolean>(false); // New state to track if search was performed
+  const [activeSearchTerm, setActiveSearchTerm] = useState<string>(''); // Track the actual searched term
   const [loading, setLoading] = useState<boolean>(false);
   const [searching, setSearching] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchMessages();
     setIsVisible(true);
   }, []);
 
@@ -54,7 +55,10 @@ export default function Home() {
 
       if (response.ok) {
         setFormData({ name: '', message: '' });
-        fetchMessages(searchName || undefined);
+        // Only refresh messages if user has already searched
+        if (hasSearched) {
+          fetchMessages(activeSearchTerm || undefined);
+        }
       } else {
         const error = await response.json();
         alert(error.error || 'Failed to send message');
@@ -76,12 +80,18 @@ export default function Home() {
 
   const handleSearch = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    fetchMessages(searchName);
+    if (searchName.trim()) {
+      setActiveSearchTerm(searchName.trim());
+      setHasSearched(true);
+      fetchMessages(searchName.trim());
+    }
   };
 
   const clearSearch = (): void => {
     setSearchName('');
-    fetchMessages();
+    setActiveSearchTerm('');
+    setHasSearched(false);
+    setMessages([]);
   };
 
   return (
@@ -325,7 +335,7 @@ export default function Home() {
               >
                 {searching ? '🔄' : '🔍'} {searching ? 'Searching...' : 'Search'}
               </button>
-              {searchName && (
+              {hasSearched && (
                 <button 
                   type="button" 
                   onClick={clearSearch}
@@ -339,8 +349,8 @@ export default function Home() {
           </form>
         </div>
 
-        {/* Messages Display - Only show when searching */}
-        {searchName && (
+        {/* Messages Display - Only show when search has been performed */}
+        {hasSearched && (
           <div style={{
             ...styles.glassCard,
             ...styles.messagesCard,
@@ -348,14 +358,14 @@ export default function Home() {
           }}>
             <h2 style={styles.messagesTitle}>
              💌 Unsent Letters ({messages.length})
-              <span style={styles.searchIndicator}> - "{searchName}"</span>
+              <span style={styles.searchIndicator}> - "{activeSearchTerm}"</span>
             </h2>
             
             {messages.length === 0 ? (
               <div style={styles.noMessages}>
                 <div style={styles.emptyIcon}>📭</div>
                 <p>
-                  No messages found for "{searchName}".
+                  No messages found for "{activeSearchTerm}".
                 </p>
               </div>
             ) : (
