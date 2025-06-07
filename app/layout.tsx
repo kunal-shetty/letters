@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title:  'unsent letters',
-  description: 'A simple message board app',
+  description: 'send heart warming messages to your loved ones anonymously',
 }
 
 export default function RootLayout({
